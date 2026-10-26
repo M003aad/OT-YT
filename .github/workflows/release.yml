@@ -1,0 +1,22 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Package extension
+        run: zip -r "OT-YT-${GITHUB_REF_NAME}.zip" manifest.json content.js interceptor.js icons
+      - name: Attach package to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: OT-YT-${{ github.ref_name }}.zip
